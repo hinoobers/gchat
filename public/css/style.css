@@ -1,0 +1,38 @@
+body {
+    background-color: gray;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: white;
+}
+
+.chat-messages {
+    border: 3px solid blanchedalmond;
+    overflow-y: scroll;
+}
+
+.chat-message p {
+    padding: 5px;
+}
+
+.chat-message {
+    border: 2px solid black;
+}
+
+.chat-input {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.chat-input input {
+    width: 100%;
+}
