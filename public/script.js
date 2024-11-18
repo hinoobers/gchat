@@ -35,8 +35,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Detect enter
-    document.getElementById("msg").addEventListener("keypress", function(e) {
+    document.addEventListener("keypress", function(e) {
         if(e.key == "Enter") {
+    
+            if(document.activeElement != document.getElementById("msg")) {
+                document.getElementById("msg").focus();
+            }
             sendChat(document.getElementById("msg").value);
         }
     })
