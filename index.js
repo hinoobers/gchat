@@ -40,6 +40,18 @@ async function generateUid(socket) {
     }
 }
 
+function filter(msg) {
+    // A) If it contains a URL, only allow trusted domains (youtube.com, github.com, google.com, etc)
+    msg = msg.replace(/(https?:\/\/[^\s]+)/g, (url) => {
+        if(url.startsWith("https://youtube.com") || url.startsWith("https://github.com") || url.startsWith("https://google.com")) {
+            return url;
+        } else {
+            return "[blocked]";
+        }
+    });
+    return msg;
+}
+
 app.get("/getchat", (req, res) => {
     const fs = require("fs");
 
@@ -59,8 +71,8 @@ io.on("connection", async (socket) => {
     socket.on("chat", (msg) => {
         msg = msg.substring(0, 40).trim();
         if(msg == "") return;
-        io.emit("chat", uid + " - " + msg);
-        appendChatLog(uid + " - " + msg);
+        io.emit("chat", uid + " - " + filter(msg));
+        appendChatLog(uid + " - " + filter(msg));
     });
 });
 
