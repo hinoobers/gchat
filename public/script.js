@@ -16,30 +16,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    fetch("/getchat").then(res => res.text())
-    .then(data => {
+    fetch("/getchat").then(res => res.json())
+    .then(messages => {
         const chat = document.getElementById("chat-messages");
-        const messages = data.split("\n");
 
-        messages.forEach(msg => {
-            if(msg.trim() != "") {
-                const p = document.createElement("div");
-                p.classList.add("chat-message");
+        messages.forEach(msgObject => {
+            let msg = `${msgObject.sender} - ${msgObject.msg}`;
+            
+            const p = document.createElement("div");
+            p.classList.add("chat-message");
 
-                msg = sanitize(msg);
-                msg = msg.replace(/(https?:\/\/[^\s]+)/g, (url) => {
-                    const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
-                    if(isImage) {
-                        return "<img src='" + url + "' width='300' height='300'/>";
-                    } else {
-                        return "<a href='" + url + "' target='_blank'>" + url + "</a>";
-                    }
-                });
+            msg = sanitize(msg);
+            msg = msg.replace(/(https?:\/\/[^\s]+)/g, (url) => {
+                const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+                if(isImage) {
+                    return "<img src='" + url + "' width='300' height='300'/>";
+                } else {
+                    return "<a href='" + url + "' target='_blank'>" + url + "</a>";
+                }
+            });
 
-                p.innerHTML = "<p>" + msg + "</p>";
+            p.innerHTML = "<p>" + msg + "</p>";
 
-                chat.appendChild(p);
-            }
+            chat.appendChild(p);
         });
 
         // When user first visits, they want to see latest messages
