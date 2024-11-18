@@ -43,7 +43,7 @@ async function generateUid(socket) {
 function filter(msg) {
     // A) If it contains a URL, only allow trusted domains (youtube.com, github.com, google.com, etc)
     msg = msg.replace(/(https?:\/\/[^\s]+)/g, (url) => {
-        if(url.startsWith("https://youtube.com") || url.startsWith("https://github.com") || url.startsWith("https://google.com")) {
+        if(url.startsWith("https://youtube.com/") || url.startsWith("https://github.com/") || url.startsWith("https://google.com/") || url.startsWith("https://imgur.com/") || url.startsWith("https://photos.google.com/") || url.startsWith("https://i.natgeofe.com/")) {
             return url;
         } else {
             return "[blocked]";
@@ -69,7 +69,7 @@ io.on("connection", async (socket) => {
     const uid = await generateUid(socket);
     //console.log(uid + " connected");
     socket.on("chat", (msg) => {
-        msg = msg.substring(0, 40).trim();
+        msg = msg.substring(0, 100).trim();
         if(msg == "") return;
         io.emit("chat", uid + " - " + filter(msg));
         appendChatLog(uid + " - " + filter(msg));

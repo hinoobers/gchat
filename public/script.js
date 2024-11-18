@@ -28,9 +28,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 msg = sanitize(msg);
                 msg = msg.replace(/(https?:\/\/[^\s]+)/g, (url) => {
-                    return "<a href='" + url + "' target='_blank'>" + url + "</a>";
+                    const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+                    if(isImage) {
+                        return "<img src='" + url + "' width='300' height='300'/>";
+                    } else {
+                        return "<a href='" + url + "' target='_blank'>" + url + "</a>";
+                    }
                 });
-                
+
                 p.innerHTML = "<p>" + msg + "</p>";
 
                 chat.appendChild(p);
@@ -72,8 +77,14 @@ document.addEventListener('DOMContentLoaded', function() {
         msg = sanitize(msg);
 
         msg = msg.replace(/(https?:\/\/[^\s]+)/g, (url) => {
-            return "<a href='" + url + "' target='_blank'>" + url + "</a>";
+            const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+            if(isImage) {
+                return "<img src='" + url + "' width='300' height='300'/>";
+            } else {
+                return "<a href='" + url + "' target='_blank'>" + url + "</a>";
+            }
         });
+
         p.innerHTML = "<p>" + msg + "</p>";
 
         const chatMessages = document.getElementById("chat-messages");
