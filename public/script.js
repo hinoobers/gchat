@@ -17,8 +17,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 chat.appendChild(p);
             }
         });
+
+        // When user first visits, they want to see latest messages
+        window.scrollTo(0, document.body.scrollHeight);
     });
 
+    
     function sendChat(msg) {
         const box = document.getElementById("msg");
 

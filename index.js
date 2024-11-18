@@ -2,6 +2,7 @@ const express = require("express");
 const {Server} = require("socket.io");
 const http = require("http");
 const app = express();
+const crypto = require("crypto");
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -22,6 +23,23 @@ async function appendChatLog(msg) {
     });
 }
 
+async function hash(msg) {
+    return crypto.createHash("sha256").update(msg).digest("hex");
+}
+
+async function generateUid(socket) {
+    if(socket.handshake.address === "::1" || socket.handshake.address.startsWith("::ffff")) {
+        // Running in a locan environment, create a random string
+        return (await hash(Math.random().toString())).substring(0, 8);
+    } else {
+        // Sure, this uses your IP address, but
+        // a) dots and colons are removed, meaning an potential attacker would have to bruteforce all the possible combinations
+        // b) it's hashed with SHA256, meaning the original data is not stored
+        // c) half the time it's a mix of IPv6 and IPv4
+        return (await hash(socket.handshake.address.replaceAll(".", "").replaceAll(":", ""))).substring(0, 8);
+    }
+}
+
 app.get("/getchat", (req, res) => {
     const fs = require("fs");
 
@@ -35,10 +53,14 @@ app.get("/getchat", (req, res) => {
     })
 })
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
+    const uid = await generateUid(socket);
+    //console.log(uid + " connected");
     socket.on("chat", (msg) => {
-        io.emit("chat", msg);
-        appendChatLog(msg);
+        msg = msg.substring(0, 40).trim();
+        if(msg == "") return;
+        io.emit("chat", uid + " - " + msg);
+        appendChatLog(uid + " - " + msg);
     });
 });
 

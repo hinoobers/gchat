@@ -35,4 +35,13 @@ body {
 
 .chat-input input {
     width: 100%;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+.chat-input button {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
 }
