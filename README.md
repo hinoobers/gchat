@@ -19,6 +19,6 @@ This is a simple chat application built with HTML and Node.js.
 
 ## Test the Application
 
-Test it here: <a href="http://srv2.byenoob.com:5086">Website</a>
+Test it here: <a href="http://bs.byenoob.com:5083">Website</a>
 
 ![image](https://github.com/user-attachments/assets/171aa57a-24a1-492c-9923-9c2fd76b052e)
