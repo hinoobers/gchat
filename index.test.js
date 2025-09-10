@@ -61,7 +61,7 @@ it("should filter out untrusted URLs", () => {
 });
 
 it("should truncate long messages", async () => {
-    const longMsg = "a".repeat(101);
+    const longMsg = "a".repeat(105);
 
     // Post that, then check chat logs
     const socket = io("http://localhost:3001");

@@ -32,7 +32,6 @@ app.use(express.static("public/"));
 app.get("/getchat", async (req, res) => {
     try {
         const data = await fs.readFile("chat.log");
-        console.log(data.toString());
         const json = JSON.parse(data);
         return res.json(json);
     } catch(err) {
@@ -62,6 +61,7 @@ io.on("connection", async (socket) => {
         if(msg == "") return;
         io.emit("chat", uid + " - " + filter(msg));
         if(isNew) {
+            data.msg = msg;
             appendChatLog(uid, filter(data));
         } else {
             appendChatLog(uid, filter(msg));
