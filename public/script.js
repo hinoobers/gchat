@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const box = document.getElementById("msg");
 
         box.value = "";
-        socket.emit("chat", msg);
+        socket.emit("chat", {temporary: false, msg});
     }
 
     btn.addEventListener('click', function() {

@@ -5,7 +5,7 @@ async function appendChatLog(sender, msg) {
     try {
         const data = await fs.readFile("chat.log");
         const json = JSON.parse(data);
-        json.push({sender, msg});
+        json.push({sender, ...msg});
         await fs.writeFile('chat.log', JSON.stringify(json));
     } catch(err) {
         console.error(err);
@@ -30,20 +30,28 @@ async function generateUid(socket) {
 }
 
 function filter(msg) {
+    let checking = typeof msg === "object" ? msg.msg : msg;
+
     // A) If it contains a URL, only allow trusted domains (youtube.com, github.com, google.com, etc)
-    msg = msg.replace(/(https?:\/\/[^\s]+)/g, (url) => {
+    checking = checking.replace(/(https?:\/\/[^\s]+)/g, (url) => {
         const trustedDomains = [
             "youtube.com", "github.com", "google.com", "imgur.com", "photos.google.com", "i.natgeofe.com"
         ];
-        const domain = new URL(url).hostname;
-        
+        let domain = new URL(url).hostname;
+        domain = domain.replace("www.", "");
+
         if(trustedDomains.includes(domain)) {
             return url;
         } else {
+            console.log(`Blocked URL: ${domain}`);
             return "[blocked]";
         }
     });
-    return msg;
+    if(typeof msg === "object") {
+        msg.msg = checking
+        return msg;
+    }
+    return checking;
 }
 
 module.exports = {filter, generateUid, hash, appendChatLog};
